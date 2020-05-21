@@ -6,7 +6,6 @@ Returns:
 import sys
 from collections import Counter
 import requests
-from fetch_chrome_history import load_chrome_urls
 import multiprocessing
 number_of_cpus = multiprocessing.cpu_count()
 
@@ -42,9 +41,6 @@ def print_response_and_stats(outputs):
 if __name__ == '__main__':
 	urls = get_all_urls(file=urls_file)
 	pool = multiprocessing.Pool(processes=2*number_of_cpus)
-	# import random
-	# for _ in range(4):
-		# urls = random.sample(urls,14)
 	try:
 		pool_outputs = pool.map(get_stuff, urls)	
 	# catching keyboard Ctrl-C
