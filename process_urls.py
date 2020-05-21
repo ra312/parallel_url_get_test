@@ -15,26 +15,32 @@ from urllib3.util import Timeout
 import urllib3.request
 import datetime
 import requests
+import sys
 
 def convert_to_ms(duration):
 	elapsed_ms = (duration.days * 86400000) + (duration.seconds * 1000) + (duration.microseconds / 1000)
 	return elapsed_ms
 
 import requests
+# all subexceptions inherit from the base class below
+from requests import ConnectionError
+
+import multiprocessing
+number_of_cpus = multiprocessing.cpu_count()
+print(f"number_of_cpus={number_of_cpus}")
 
 def main():
-	url = 'https://example.com/'
 	user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
 	header = {'User-Agent': user_agent}
+	timeout=1.0 # what is the time unit here ?
 	with open('list_of_urls','rb') as urls:
-		
 		for url in urls:
 			csv_terms = []
 			ready_url = url.rstrip().decode('utf-8')
 			csv_terms.append(ready_url)
 			# print(ready_url)
 			try:
-				r = requests.get(ready_url,headers=header)
+				r = requests.get(ready_url,headers=header, timeout=timeout)
 				response_code = r.status_code
 				csv_terms.append(str(response_code))
 				document_size = len(str(r.content))
@@ -44,7 +50,8 @@ def main():
 				csv_terms.append(str(ms_elapsed)+'ms')
 				csv_row = ';'.join(csv_terms)
 				print(csv_row)
-			except:
+			except ConnectionError as error:
+				print(error)
 				pass
 
 			
