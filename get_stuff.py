@@ -15,10 +15,10 @@ def convert_to_ms(duration):
 
 import multiprocessing
 def get_stuff(url):	
-	print(f"current_process = {multiprocessing.current_process()}")
-	# for url in urls:
-	# csv_rows = []
-	# for url in urls:
+	current_process = multiprocessing.current_process()
+	# print(f"current_process = {current_process}")
+	process_id = current_process._identity[0]
+	# print(f"process_id={process_id}")
 	csv_terms = []
 	csv_terms.append(url)
 	r = requests.get(url,headers=header, timeout=timeout)
@@ -31,4 +31,4 @@ def get_stuff(url):
 	csv_terms.append(str(ms_elapsed)+'ms')
 	csv_row = ';'.join(csv_terms)
 	# csv_rows.append(csv_row)
-	return csv_row
+	return (process_id, csv_row)
