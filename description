@@ -1,0 +1,4 @@
+size of the documents is measured in length of text.
+raw bytes
+'Content-Length'
+'Transfer-Encoding: chunked'
